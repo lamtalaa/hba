@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { HashRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { createClient } from '@supabase/supabase-js';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
@@ -15,7 +16,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <SessionContextProvider supabaseClient={supabase}>
-     <App />
+      <HashRouter>
+        <App />
+      </HashRouter>
     </SessionContextProvider>
   </React.StrictMode>
 );
