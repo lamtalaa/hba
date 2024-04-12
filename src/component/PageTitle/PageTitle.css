@@ -1,0 +1,39 @@
+.page_title-container {
+
+   display: flex;
+   align-items: center;
+   flex-direction: column;
+   width: 100%;
+}
+
+ .page_header, .page_title {
+
+   margin-top: 2%;
+   color: var(--theme-gray-1);
+ }
+
+ .page_header { /* For the Home Page*/
+
+   margin-bottom: 2.5%;
+ }
+
+ .text {
+
+   margin-top: 0%;
+   font-size: 1.2em;
+   white-space: pre;
+   color: var(--theme-gray-2);
+ }
+
+ .page_title { /* Title for every other page */
+
+   text-align: center;
+   margin-bottom: 0%;
+ }
+
+ .page_title-container hr {
+
+   margin-top: 1%;
+   margin-bottom: 0;
+   width: 100%;
+ }

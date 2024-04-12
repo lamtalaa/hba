@@ -1,0 +1,105 @@
+/* GoogleCalendarEvents.css */
+
+.event {
+    padding: 5px 15px;
+    width: 88%;
+    background-color: var(--theme-constant);/* 浅蓝色 */
+}
+
+.select-calendar-button {
+    width: 200px;
+    background-color: #007bff; /* 按钮的背景色 */
+    color: #fff; /* 按钮文本的颜色 */
+    padding: 10px 20px; /* 调整需要的内边距 */
+    border: none;
+    border-radius: 5px; /* 调整需要的边框半径 */
+    cursor: pointer;
+    font-size: 16px; /* 调整需要的字体大小 */
+  }
+  
+  .select-calendar-button:hover {
+    background-color: #0056b3; /* 按钮悬停时的背景色 */
+  }
+
+.calendar-list h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.calendar-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.calendar-list li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.calendar-list label {
+    display: inline-block;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-list button {
+    padding: 10px 20px; /* 调整按钮内边距以保持一致性 */
+    width: 200px; /* 设置按钮宽度为固定值，这里设置为200px，可以根据需要调整 */
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f8ff; /* 浅蓝色 */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.calendar-list button:hover {
+    background-color: #d3e8ff; /* 淡蓝色 */
+}
+
+.location-suntime-container {
+    margin-top: 1%;
+    width: 100%;
+}
+
+.event-container {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    width: 96%;
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.event-container > .event:not(:last-child) {
+    margin-bottom: 2%;
+}
+
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event h3 {
+    font-size: 1.2em;
+}
+
+.event-title {
+    max-width: 160px;
+    overflow-wrap: break-word;
+}
+
+.calendar-name {
+    font-size: 0.8em;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.event p, .event h3 {
+    margin: 0;
+}

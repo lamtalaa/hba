@@ -1,0 +1,167 @@
+.form-container {
+
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible;
+}
+
+.form-main-content {
+
+    position: relative;
+    width: 100%;
+    padding-top: 7%;
+    border-bottom: 2px solid var(--theme-primary-4to5);
+    margin-bottom: 10px;
+    max-height: 74vh;
+    width: 100%;
+    padding: 0 7%;
+    overflow-y: auto;
+    scrollbar-gutter: stable both-edges;
+}
+
+.form-main-content > .form-section {
+
+    margin-top: 7%;
+}
+
+.form-section > h2 {
+
+    background-color: var(--theme-background);
+    width: fit-content;
+    position: absolute;
+    margin: 0;
+    padding: 0 6px 0 0;
+    top: -20px;
+    left: -10px;
+    z-index: 1;
+}
+
+.form-section {
+
+    border: solid var(--theme-primary-4);
+    border-width: 2px;
+    position: relative;
+}
+
+.form-body {
+
+    padding: 4% 2% 1.5% 2%;
+}
+
+.form-body-wrapper_flex-column {
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.form-body-wrapper_flex-row {
+
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+}
+
+.form-body-additional-options {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+
+
+.form-body-external-ids {
+
+    max-width: 40%;
+}
+
+.form-field > label {
+
+    display: block;
+    margin-bottom: 5px;
+    width: fit-content;
+}
+
+.form-field > input {
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-field.flex0-1 { flex: 0.5;}
+.form-field.flex1 { flex: 1; }
+.form-field.flex2 { flex: 2; }
+.form-field.flex3 { flex: 3; }
+.form-field.flex4 { flex: 4; }
+.form-field.flex5 { flex: 5; }
+
+.form-text-field {
+
+    box-sizing: border-box;
+    resize: vertical;
+    width: 100%;
+}
+
+.form-checkbox-text {
+
+    font-size: 0.9em;
+    margin: auto;
+}
+
+.form-checkbox {
+
+    margin: 0 8px 0px 0;
+}
+
+.form-dropdownMenu-wrapper {
+
+    align-items: flex-end;
+    column-gap: 25px;
+}
+
+.display-name-container {
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
+.rider-table {
+
+    border: 2px solid var(--theme-primary-3);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.rider-table tr {
+
+    border-bottom: 1px solid var(--theme-primary-4);
+}
+
+.rider-table th {
+
+    padding: 5px 0;
+}
+
+.rider-table td {
+
+    padding: 5px 0;
+}
+
+.rider-table input {
+
+    width: 80%;
+}
+
+.form-buttons {
+
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}

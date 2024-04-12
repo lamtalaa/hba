@@ -1,0 +1,217 @@
+:root {
+  color-scheme: light dark;
+
+  /* Constant Styles */
+  --theme-constant: light-dark(#ffffff, #1c1c1c);
+  --theme-constant-rev: light-dark(#1c1c1c, #ffffff);
+  --theme-white: #ffffff;
+  --theme-black: #1c1c1c;
+
+  /* Color Styles */
+    /* Grayscale */
+  --theme-gray-1: light-dark(#121212, color-mix(in srgb, #ffffff, #121212 10%)); /* 90% -- Titles & Bold Text */
+  --theme-gray-2: light-dark(#585757, color-mix(in srgb, #ffffff, #121212 30%)); /* 70% -- Body Text */
+  --theme-gray-3: light-dark(#969696, color-mix(in srgb, #ffffff, #121212 60%)); /* 40% -- Small Text & Icons */
+  --theme-gray-4: light-dark(#E8E8E8, color-mix(in srgb, #ffffff, #121212 90%)); /* 10% -- Fine Details (e.g., borders, lines) */
+
+    /* Primary Colors */
+  --theme-primary-1: #0b88d6;
+  --theme-primary-2: light-dark(#20a2f4, #0b75b8); /* 10% */
+  --theme-primary-3: light-dark(#51b7f6, #075586); /* 20% */
+  --theme-primary-4: light-dark(#81cbf9, #053655); /* 30% */
+  --theme-primary-4to5: light-dark(#a3d8f8, #032235);
+  --theme-primary-5: light-dark(#b2dffb, #021c2b); /* 40% */
+
+    /* Background */
+  --theme-background: light-dark(#e2f3fe, #03151f);
+
+    /* System Colors */
+  --theme-blue-active: light-dark(#66b6ff, #005099 );
+  --theme-blue-default: light-dark(#339dff, #006acc);
+  --theme-blue-hover: #0085ff;
+
+  --theme-green-active: light-dark(#21ff5f, #005417 );
+  --theme-green-default: light-dark(#00ed42, #008726);
+  --theme-green-hover: #00ba34;
+
+  --theme-orange-active: light-dark(#ffb660, #934f00);
+  --theme-orange-default: light-dark(#ff9e2d, #c66b00);
+  --theme-orange-hover: #f98600;
+
+  --theme-red-active: light-dark(#f38888, #9e1111);
+  --theme-red-default: light-dark(#ee5a5a, #cd1515);
+  --theme-red-hover: #e92c2c;
+}
+
+.light {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/* 使整个页面内容垂直和水平居中 */
+.App {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: flex-start; /* 垂直居中 */
+  min-height: 100vh; /* 设置最小高度为视口高度 */
+}
+
+/* 设置 body 样式 */
+body {
+  font-family: "Raleway", Sans-serif; /* 设置字体 */
+  margin: 0;
+  background-color: var(--theme-background);
+}
+
+p, span, th, td, label, button {
+  font-family: "Raleway", Sans-serif;
+  color: var(--theme-gray-2);
+}
+
+h1, h2, h3, h4 { 
+  font-family: "Rum Raisin", Sans-serif;
+  color: var(--theme-gray-1); 
+  font-weight: 500; 
+}
+h1 { font-size: 2.4em; }
+h2, h3, h4 { font-size: 1.6em; }
+
+/* 设置主要内容的样式 */
+.main-content {
+  width: 90%; /* 相对于视口宽度的90% */
+  min-width: 700px;
+  max-width: 900px; /* 设置最大宽度 */
+  padding: 20px;
+}
+
+/* 设置 App-logo 的样式 */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* 设置 App-header 的样式 */
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* 设置 App-link 的样式 */
+.App-link {
+  color: #61dafb;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.calendar-parent-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 4%;
+  width: 100%;
+}
+
+.address-container {
+  width: 100%;
+}
+
+.side-content-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  margin-left: 3%;
+
+  background-color: var(--theme-primary-5);
+}
+
+.side-content-container > *:not(:last-child) {
+  border-bottom: 2px solid var(--theme-primary-4);
+}
+
+.side-content-container .accordion button {
+  max-height: 40px;
+}
+
+.account-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-between;
+  min-height: 80px;
+}
+
+.google-signin-button, .qb-signin-button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+button {
+
+  padding: 6px 16px;
+  color: var(--theme-white);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-button {
+
+  background-color: var(--theme-green-default);
+}
+.submit-button:hover {
+
+  background-color: var(--theme-green-hover);
+}
+
+.delete-button {
+
+  background-color: var(--theme-red-default);
+}
+.delete-button:hover {
+
+  background-color: var(--theme-red-hover);
+}
+
+.option-button {
+
+  background-color: var(--theme-blue-default);
+}
+
+.option-button:hover {
+
+  background-color: var(--theme-blue-hover);
+}
+
+/*////////////////////////////////////////*/
+.side_appointment_page {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: 37%;
+  margin-left: 0;
+  margin-top: -65%; 
+  background-color: var(--theme-primary-5);
+}

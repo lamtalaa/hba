@@ -1,0 +1,84 @@
+.login-success-message {
+  position: fixed;
+  top: 20px; /* 调整垂直位置 */
+  left: 50%; /* 居中 */
+  transform: translateX(-50%);
+  background-color: #2c752e; /* 成功消息的背景颜色 */
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 2px solid black; /* 添加黑色边框 */
+  z-index: 999; /* 确保弹窗在其他元素之上 */
+  display: block; /* 修改为 block 或 inline */
+  animation: fadeInOut 2s ease; /* 添加消失动画 */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1; /* 初始透明度为1，即完全显示 */
+  }
+  50% {
+    opacity: 1; /* 50%时透明度保持为1 */
+  }
+  100% {
+    opacity: 0; /* 末尾透明度为0，即完全消失 */
+  }
+}
+
+.error-message {
+  color: red;
+}
+
+.login-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: #ffffff;
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-popup form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-popup label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-popup input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+.login-popup input:focus {
+  border-color: #007bff;
+}
+
+.login-popup .error-message {
+  color: #dc3545;
+  margin-bottom: 10px;
+}
+
+.login-popup button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-popup button:hover {
+  background-color: #0056b3;
+}

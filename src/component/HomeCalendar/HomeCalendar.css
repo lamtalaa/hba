@@ -1,0 +1,149 @@
+/* 日历容器样式 */
+.calendar-container {
+  width: 65%; /* 添加右边距，与其他组件分开 */
+  height: 300px;
+  border-collapse: collapse;
+}
+
+.calendar-table {
+  height: 100%;
+}
+  
+.calendar-container th,
+.calendar-table td {
+  padding: 0;
+}
+
+.calendar-table tr {
+  height: 20%;
+}
+  
+.calendar-button {
+  width: 100%; /* 设置按钮宽度 */
+  height: 100%; /* 设置按钮高度 */
+  background-color: var(--theme-constant); /* 设置按钮背景颜色为透明 */
+  font-weight: bold;
+  color: var(--theme-gray-1);
+  padding: 0;
+  border-radius: 0;
+}
+  
+.calendar-container table {
+  width: 100%; /* 让表格占满父元素的宽度 */
+  height: 100%;
+}
+  
+.calendar-container th,
+.calendar-container td {
+  width: 40px; /* 设置表格单元格宽度 */
+  height: 40px; /* 设置表格单元格高度 */
+  text-align: center; /* 文字居中 */
+}
+  
+.calendar-container th {
+  background-color: var(--theme-primary-5); /* 设置表头背景颜色 */
+  color: var(--theme-gray-2);
+}
+  
+/* 非当前月份的日期样式 */
+.not-this-month {
+  color: var(--theme-gray-3);
+}
+  
+/* 当日日期背景色 */
+.calendar-button.today {
+  background-color: var(--theme-primary-4); /* 浅蓝色 */
+}
+  
+/* 已经过去的日期背景色变深 */
+.calendar-button.before-today {
+}
+  
+/* 过去且非本月日期的样式 */
+.not-this-month.before-today {
+}
+  
+.calendar-button:hover {
+  background-color: var(--theme-primary-4to5);
+  color: var(--theme-constant-rev);
+  border: solid;
+  border-color: var(--theme-gray-4);
+}
+
+.calendar-container {
+  font-family: Arial, sans-serif;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  min-height: 50px;
+  height: 100%;
+  flex-wrap: wrap;
+}
+
+.calendar-header:after {
+
+  content: '';
+  flex: none;
+  margin: auto;
+  width: 95%;
+  background: var(--theme-primary-4to5);
+  height: 2px;
+}
+
+.calendar-header button {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  width: 35px; /* 设置宽度 */
+  height: 30px; /* 设置高度 */
+}
+
+.calendar-header button:hover {
+  color: #333; /* change color on hover if needed */
+}
+
+.divider {
+  border-top: 1px solid #ccc; /* 分界线样式 */
+  margin: 10px 0; /* 分界线与周围内容的间距 */
+}
+
+.calendar-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 78px;
+  height: 100%;
+  margin-right: 4%;
+  
+}
+
+.calendar-buttons button {
+  position: static;
+}
+
+.calendar-header button {
+  border: none;
+  border-radius: 5px; /* 设置圆角 */
+  padding: 5px; /* 添加内边距 */
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  color: var(--theme-gray-1);
+  background-color: var(--theme-constant);
+}
+
+.calendar-header button:hover {
+  background-color: lightgray; /* 悬停时的背景色 */
+}
+
+.month {
+  font-size: 24px; /* 设置字体大小 */
+  margin: 0 0 0 4%;
+  color: var(--theme-gray-1);
+}
