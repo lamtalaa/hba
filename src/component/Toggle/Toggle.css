@@ -1,21 +1,11 @@
 .toggle-button {
 
-    /*padding: 10px 20px;
-    border-radius: 50%;
-    width: 100px;
-    border: none;
-    cursor: pointer;*/
-    
+    background-color: var(--theme-constant-rev);
+    color: var(--theme-constant);
 }
 
-.toggle-button.active {
+.toggle-button.inactive:hover,
+.toggle-button.active:hover {
 
-    background-color: #4CAF50;
-    color: white;
-}
-
-.toggle-button.inactive {
-
-    background-color: #f44336;
-    color: white;
+    background-color: var(--theme-gray-3);
 }

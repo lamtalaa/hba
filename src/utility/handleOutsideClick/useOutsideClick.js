@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+// Invoke callback once user clicks outside an object of interest
 const useOutsideClick = (callback) => {
     const ref = useRef();
 

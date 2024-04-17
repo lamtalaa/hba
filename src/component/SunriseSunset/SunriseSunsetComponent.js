@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+
 import './SunriseSunsetComponent.css';
 
 function SunriseSunsetComponent({ coordinates, selectedDate, selectedLocation, onSunriseSunsetTime }) {
     const [sunriseSunsetInfo, setSunriseSunsetInfo] = useState(null);
 
     useEffect(() => {
+
         console.log("Received coordinates:", coordinates);
         console.log("Received selectedDate:", selectedDate.format('YYYY-MM-DD'));
         const fetchData = async () => {
@@ -21,12 +23,9 @@ function SunriseSunsetComponent({ coordinates, selectedDate, selectedLocation, o
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
                 if (data.status === "OK") {
                     const sunrise = moment(data.results.sunrise).tz('America/New_York').format('h:mm A');
                     const sunset = moment(data.results.sunset).tz('America/New_York').format('h:mm A');
-                    console.log("Sunrise: ",sunrise);
-                    console.log("Sunset: ", sunset);
                     setSunriseSunsetInfo({ sunrise, sunset });
 
                     // 调用父组件中的回调函数，并传递日出日落时间
@@ -42,17 +41,15 @@ function SunriseSunsetComponent({ coordinates, selectedDate, selectedLocation, o
         fetchData();
     }, [coordinates, selectedDate, onSunriseSunsetTime]);
 
-    console.log(sunriseSunsetInfo);
-    console.log("Props in SunriseSunsetComponent:", { coordinates, selectedDate, selectedLocation, onSunriseSunsetTime });
-
     return (
+        
         <div className="sunrise-sunset-container">
             <div className="sunrise-sunset-wrapper">
             <div className="sunrise-sunset-header">
                 {selectedLocation !== "" ? (
                     <p className="ss-location">{selectedLocation}</p>
                 ) : (
-                    <p className="ss-location">Search A City</p>
+                    <p className="ss-location">Search City</p>
                 )
                 }
                 <span className="sunrise-sunset-header-divider"></span>

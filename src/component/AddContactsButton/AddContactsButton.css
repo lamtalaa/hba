@@ -1,3 +1,4 @@
+/* Contact button itself */
 .contact-button {
 
     position: relative;
@@ -8,10 +9,11 @@
     height: 100%;
 }
 
+/* Dropdown content of button */
 .contact-content {
 
     position: absolute;
-    padding: 8px 24px 10px 12px;
+    padding: 8px 18px 18px 20px;
     width: 400px;
     left: -234%;
     border-radius: 5px;
@@ -28,17 +30,6 @@
 .contact-content-wrapper > h2 {
 
     margin: 0 0 6px 0;
-}
-
-.contact-content-wrapper > .form-body-wrapper_flex-column:after {
-
-    content: '';
-    background-color: var(--theme-primary-3);
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 3%;
-    height: 100%;
 }
 
 .contact-content.active {

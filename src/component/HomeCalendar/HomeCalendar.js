@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
-import './HomeCalendar.css';
-import '../SearchBar/SearchBar.css';
 import { useSession } from '@supabase/auth-helpers-react';
 
+import './HomeCalendar.css';
+import '../SearchBar/SearchBar.css';
+
+// Calendar that is linked to ones Google Calendar
 function RenderCalendar({ selectedDate, onDateSelect }) {
+
     const [currentMonth, setCurrentMonth] = useState(moment());
     const session = useSession();
 
@@ -50,6 +53,7 @@ function RenderCalendar({ selectedDate, onDateSelect }) {
     };
     
     return (
+
         <>
             <table className="calendar-container">
                 <thead>
@@ -58,8 +62,16 @@ function RenderCalendar({ selectedDate, onDateSelect }) {
                         <div className="calendar-header">
                             <h2 className="month"> {currentMonth.format('MMMM YYYY')}</h2>
                             <div className="calendar-buttons">
-                                <button onClick={goToPreviousMonth} className="arrow-icon"><span className="arrow arrow-rev"></span></button>
-                                <button onClick={goToNextMonth} className="arrow-icon"><span className="arrow arrow"></span></button>
+                                <button 
+                                    onClick={goToPreviousMonth} 
+                                    className="arrow-icon">
+                                        <span className="arrow arrow-rev"></span>
+                                </button>
+                                <button 
+                                    onClick={goToNextMonth} 
+                                    className="arrow-icon">
+                                        <span className="arrow arrow"></span>
+                                </button>
                             </div>
                         </div>
                         </th>
@@ -75,12 +87,17 @@ function RenderCalendar({ selectedDate, onDateSelect }) {
                     </tr>
                 </thead>
                 <tbody className="calendar-table">
-                    {calendar.reduce((rows, key, index) => (index % 7 === 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows, []).map((row, rowIndex) => (
+                    {calendar.reduce((rows, key, index) => (
+                        index % 7 === 0 
+                        ? rows.push([key]) 
+                        : rows[rows.length - 1].push(key)) && rows, []).map((row, rowIndex) => (
                         <tr key={rowIndex}>
                             {row.map((day) => (
                                 <td key={day.date.format('YYYY-MM-DD')}>
-                                    <button className={`${day.buttonClassName} hovered`} onClick={() => handleDateClick(day.date)}>
-                                        {day.date.date()}
+                                    <button 
+                                        className={`${day.buttonClassName} hovered`} 
+                                        onClick={() => handleDateClick(day.date)}>
+                                            {day.date.date()}
                                     </button>
                                 </td>
                             ))}
@@ -88,8 +105,8 @@ function RenderCalendar({ selectedDate, onDateSelect }) {
                     ))}
                 </tbody>
             </table>
-            </>
-            );
+        </>
+    );
 }
 
 export default RenderCalendar;

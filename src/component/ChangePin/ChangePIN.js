@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase.js';
+
 import './ChangePIN.css';
 
 function ChangeEmailPassword() {
+
     const [newEmail, setNewEmail] = useState(''); // State for new email
     const [newPassword, setNewPassword] = useState(''); // State for new password
+    const [newWeight, setNewWeight] = useState('');
+
     const [error, setError] = useState(null); // State for error message
     const [success, setSuccess] = useState(false); // State for success message
     const [currentUser, setCurrentUser] = useState(null); // State for current user data
 
+    // Fetch user data
     useEffect(() => {
+
         async function fetchUserData() {
             try {
                 const usernameFromLocal = localStorage.getItem('username'); // Get username from local storage
                 if (usernameFromLocal) {
                     const { data, error } = await supabase
-                        .from('login')
-                        .select('email, pin')
-                        .eq('name', usernameFromLocal)
+                        .from('Employee')
+                        .select('Email, Pin')
+                        .eq('Name', usernameFromLocal)
                         .single();
 
                     if (error) {
@@ -34,16 +40,26 @@ function ChangeEmailPassword() {
         fetchUserData(); // Fetch user data on component mount
     }, []);
 
-    // Function to handle changing email and password
+    // Handle changing email and password
     const handleChangeEmailPassword = async () => {
+
         try {
+            if (!newEmail) {
+                throw new Error('Email address cannot be empty.');
+              }
+            if (!newPassword) {
+                throw new Error('Password cannot be empty.');
+              }
+              if (!newWeight) {
+                throw new Error('Weight cannot be empty.');
+              }
             const usernameFromLocal = localStorage.getItem('username'); // Get username from local storage
             if (usernameFromLocal) {
                 // Update email and password in the database
                 const { data, error: updateError } = await supabase
-                    .from('login')
-                    .update({ email: newEmail, pin: newPassword })
-                    .eq('name', usernameFromLocal);
+                    .from('Employee')
+                    .update({ Email: newEmail, Pin: newPassword, Weight: newWeight })
+                    .eq('Name', usernameFromLocal);
 
                 if (updateError) {
                     throw updateError;
@@ -59,6 +75,7 @@ function ChangeEmailPassword() {
     };
 
     return (
+        
         <div className="change-email-password-container">
             <h2>Change Email and Password</h2>
             {currentUser && (
@@ -81,8 +98,17 @@ function ChangeEmailPassword() {
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
                     </div>
+                    <div>
+                        <label htmlFor="newWeight">New Weight:</label>
+                        <input
+                            type="Weight" // Assuming "pin" is used for password
+                            id="newWeight"
+                            value={newWeight}
+                            onChange={(e) => setNewWeight(e.target.value)}
+                        />
+                    </div>
                     {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error message if any */}
-                    {success && <div style={{ color: 'green' }}>Email and password changed successfully!</div>} {/* Display success message */}
+                    {success && <div style={{ color: 'green' }}>Successfully!</div>} {/* Display success message */}
                     <button onClick={handleChangeEmailPassword}>Change Email and Password</button>
                 </>
             )}

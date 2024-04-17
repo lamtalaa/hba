@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment-timezone';
 import { useSession } from '@supabase/auth-helpers-react';
-import './GoogleCalendarEvents.css';
+import moment from 'moment-timezone';
+
 import Accordion from '../Accordion/Accordion';
 
+import './GoogleCalendarEvents.css';
+
 function GoogleCalendarEvents({ selectedDate, children }) {
+
     const [eventsOnSelectedDate, setEventsOnSelectedDate] = useState([]);
     const session = useSession();
     const [calendars, setCalendars] = useState([]);
@@ -102,33 +105,35 @@ function GoogleCalendarEvents({ selectedDate, children }) {
     }, [selectedDate, session, selectedCalendars, selectedCalendarIds, selectedCalendarNames]);
 
     const handleSelectCalendar = (calendarId, calendarName) => {
+
         if (!selectedCalendarIds.includes(calendarId)) {
             let updatedIds = [...selectedCalendarIds, calendarId];
             let updatedNames = [...selectedCalendarNames, calendarName];
             
-            // 更新selectedCalendars
+            // Upload selectedCalendars
             let updatedCalendars = [...selectedCalendars, calendars.find(calendar => calendar.id === calendarId)];
     
             setSelectedCalendarIds(updatedIds);
             setSelectedCalendarNames(updatedNames);
-            setSelectedCalendars(updatedCalendars); // 更新selectedCalendars
+            setSelectedCalendars(updatedCalendars); // Upload selectedCalendars
     
         } else {
             // Remove calendarName if already selected
             const updatedIds = selectedCalendarIds.filter(id => id !== calendarId);
             const updatedNames = selectedCalendarNames.filter(name => name !== calendarName);
             
-            // 更新selectedCalendars
+            // Upload selectedCalendars
             let updatedCalendars = selectedCalendars.filter(calendar => calendar.id !== calendarId);
     
             setSelectedCalendarIds(updatedIds);
             setSelectedCalendarNames(updatedNames);
-            setSelectedCalendars(updatedCalendars); // 更新selectedCalendars
+            setSelectedCalendars(updatedCalendars); // Upload selectedCalendars
     
         }
     };
 
     return (
+
         <>
             <Accordion icon="Calendar">
             <div className="calendar-list">
@@ -144,8 +149,10 @@ function GoogleCalendarEvents({ selectedDate, children }) {
                             <label htmlFor={calendar.id}>{calendar.summary}</label>
                         </li>
                     )) : 
-                        <p>Google Access Token Expired -- Please sign into your Google Account again</p>
-                        /* Need to add refresh token functionality */
+                        <>
+                            <p>- Google Access Token Expired -</p>
+                            <p>Please sign into your Google Account again</p>
+                        </>
                     }
                 </ul>
             </div>
@@ -165,10 +172,13 @@ function GoogleCalendarEvents({ selectedDate, children }) {
                         </div>
                     ))
                 ) : (
-                    <p>No events found</p>
+                    <p>- No events found -</p>
                 )
             ) : (
-                <p>No calendars enabled. Please select from "Your Calendars".</p>
+                <>
+                    <p>- No calendars enabled -</p>
+                    <p>Please select from "Your Calendars".</p>
+                </>
             )}
             </div>
         </>

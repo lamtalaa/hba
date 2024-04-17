@@ -1,3 +1,4 @@
+/* Box for the form */
 .form-container {
 
     width: 70%;
@@ -7,6 +8,7 @@
     overflow: visible;
 }
 
+/* Form itself */
 .form-main-content {
 
     position: relative;
@@ -21,11 +23,18 @@
     scrollbar-gutter: stable both-edges;
 }
 
+/* Space between forms */
 .form-main-content > .form-section {
 
     margin-top: 7%;
 }
 
+.form-main-content > .form-section:last-child {
+
+    margin-bottom: 4%;
+}
+
+/* Title of each section */
 .form-section > h2 {
 
     background-color: var(--theme-background);
@@ -45,6 +54,7 @@
     position: relative;
 }
 
+/* Body of each section */
 .form-body {
 
     padding: 4% 2% 1.5% 2%;
@@ -72,8 +82,6 @@
     margin-bottom: 8px;
 }
 
-
-
 .form-body-external-ids {
 
     max-width: 40%;
@@ -92,6 +100,7 @@
     box-sizing: border-box;
 }
 
+/* Space between form elements */
 .form-field.flex0-1 { flex: 0.5;}
 .form-field.flex1 { flex: 1; }
 .form-field.flex2 { flex: 2; }
@@ -130,7 +139,26 @@
     row-gap: 4px;
 }
 
-.rider-table {
+.form-rider-table-delete {
+
+    text-align: center;
+    width: fit-content;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+
+.form-rider-table-delete th {
+
+    padding: 0 15px;
+    border-bottom: 1px solid var(--theme-primary-5);
+}
+
+.form-rider-table-delete td {
+
+    padding: 0 20px;
+}
+
+.form-rider-table {
 
     border: 2px solid var(--theme-primary-3);
     text-align: center;
@@ -139,22 +167,22 @@
     border-collapse: collapse;
 }
 
-.rider-table tr {
+.form-rider-table tr {
 
     border-bottom: 1px solid var(--theme-primary-4);
 }
 
-.rider-table th {
+.form-rider-table th {
 
     padding: 5px 0;
 }
 
-.rider-table td {
+.form-rider-table td {
 
     padding: 5px 0;
 }
 
-.rider-table input {
+.form-rider-table input {
 
     width: 80%;
 }
@@ -164,4 +192,13 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
+}
+
+.modal-buttons {
+
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    column-gap: 20px;
+    justify-content: flex-end;
 }

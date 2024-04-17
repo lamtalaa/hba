@@ -1,0 +1,81 @@
+/* Options above the table */
+.customer-table-options {
+
+    display: flex;
+    justify-content: space-between;
+    align-self: flex-end;
+    width: 70%;
+    height: 100%;
+}
+
+.customer-table-buttons {
+
+    display: flex;
+    width: 45%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-table-buttons > p {
+
+    margin: 0;
+}
+
+.customer-table-searchbar {
+
+    width: 50%;
+    height: 100%;
+}
+
+/* Overall design of tables for customer searching */
+.customer-search-table {
+
+    text-align: center;
+    border-collapse: collapse;
+    border: 2px solid var(--theme-primary-3);
+}
+
+.customer-table {
+
+    width: 100%;
+}
+
+/* The free-floating window that contains the rider table */
+.customer-rider-table {
+
+    top: 90%;
+    right: 40%;
+    position: absolute;
+    z-index: 1;
+}
+
+.rider-table {
+
+    min-width: 250px;
+    background-color: var(--theme-primary-5);
+}
+
+.customer-table-header {
+
+    border: 2px solid var(--theme-primary-3);
+}
+
+.customer-table-header th {
+
+    padding: 5px 0;
+}
+
+.customer-table-content td {
+
+    padding: 10px 0;
+}
+
+.customer-table-item {
+
+    border-bottom: 1px solid var(--theme-primary-4);
+}
+
+.customer-table-item > .form-body-wrapper_flex-row {
+
+    position: relative;
+}

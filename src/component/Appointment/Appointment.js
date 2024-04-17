@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import './Appointment.css';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabase';
+import { toast, ToastContainer } from 'react-toastify';
 import moment from 'moment';
+import Email from '../Email/Email';
 
-function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
-    const [visibility, setVisibility] = useState('Public');
-    const [time, setTime] = useState('AM');
-    const [searchCrew, setSearchCrew] = useState('');
+import 'react-toastify/dist/ReactToastify.css';
+import './Appointment.css';
+
+function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation, onTimeChange, parentTime }) {
+
+    const [visibility, setVisibility] = useState('Shared');
+    const [time, setTime] = useState(parentTime);
     const [customerNames, setCustomerNames] = useState([]);
     const [visibilityOpen, setVisibilityOpen] = useState(false);
     const [timeOpen, setTimeOpen] = useState(false);
@@ -21,13 +25,83 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
     const [riderWeights, setRiderWeights] = useState({});
     const [employeeWeights, setEmployeeWeights] = useState({});
     const [riderNames, setRiderNames] = useState({});
-    const [emailBody, setEmailBody] = useState();
+    const [emailBody, setEmailBody] = useState('');
     const sunriseMoment = moment(sunrise, 'HH:mm:ss');
     const sunsetMoment = moment(sunset, 'HH:mm:ss');
+    const [Subject, setSubject] = useState('');
+    const [Recipients, setRecipients] = useState([]);
 
-    const handleEmailBodyChange = (e) => {
-        setEmailBody(e.target.value);
-    };
+    useEffect(() => {
+
+        const fetchRecipients = async () => {
+            try {
+                // 获取所有骑手的邮箱地址
+                const riderRecipientPromises = Object.values(riderNames).map(async (riderArray) => {
+                    const personIdPromises = riderArray.map(async (riderName) => {
+                        const { data: riderData, error: riderError } = await supabase
+                            .from('Rider')
+                            .select('Person_id')
+                            .eq('Name', riderName);
+
+                        if (riderError) {
+                            console.error('Error fetching rider data:', riderError.message);
+                        } else {
+                            // 如果找到了骑手数据，则返回骑手的 Person_id
+                            return riderData[0]?.Person_id;
+                        }
+                    });
+
+                    // 等待所有骑手 Person_id 的 Promise 完成
+                    const personIds = await Promise.all(personIdPromises);
+
+                    // 获取所有骑手的邮箱地址
+                    const riderEmailPromises = personIds.map(async (personId) => {
+                        const { data: personData, error: personError } = await supabase
+                            .from('Person')
+                            .select('Email')
+                            .eq('Person_id', personId);
+
+                        if (personError) {
+                            console.error('Error fetching person data:', personError.message);
+                        } else {
+                            // 如果找到了骑手的邮箱地址，则返回邮箱地址
+                            return personData[0]?.Email;
+                        }
+                    });
+
+                    // 等待所有骑手邮箱地址的 Promise 完成
+                    return Promise.all(riderEmailPromises);
+                });
+
+                // 获取所有员工的邮箱地址
+                const employeeRecipientPromises = selectedEmployeeNames.map(async (employeeName) => {
+                    const { data: employeeData, error: employeeError } = await supabase
+                        .from('Employee')
+                        .select('Email')
+                        .eq('Name', employeeName);
+                    if (employeeError) {
+                        console.error('Error fetching employee data:', employeeError.message);
+                    } else {
+                        return employeeData[0]?.Email;
+                    }
+                });
+
+                // 等待所有骑手和员工邮箱地址的 Promise 完成
+                const riderRecipients = await Promise.all(riderRecipientPromises);
+                const employeeRecipients = await Promise.all(employeeRecipientPromises);
+
+                // 将骑手和员工邮箱地址合并成一个数组
+                const allRecipients = riderRecipients.flat().concat(employeeRecipients);
+                setRecipients(allRecipients);
+            } catch (error) {
+                console.error('Error fetching recipients:', error.message);
+            }
+        };
+
+        fetchRecipients();
+    }, [riderNames, selectedEmployeeNames, supabase]);
+
+    console.log(Recipients);
 
     // Function to handle visibility change
     const handleVisibilityChange = (option) => {
@@ -39,22 +113,19 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
     const handleTimeChange = (option) => {
         setTime(option);
         setTimeOpen(false);
-    };
-
-    const handleSearchCrewChange = (event) => {
-        const value = event.target.value;
-        setSearchCrew(value);
+        onTimeChange(option);
     };
 
     useEffect(() => {
+
         const fetchData = async () => {
             try {
                 const { data: customeData, error: customeError } = await supabase
                     .from('Customer')
                     .select('Display_Name')
-                    .eq('PrefersPublic', visibility === 'Public')
+                    .eq('PrefersPublic', visibility === 'Shared')
                     .eq('PrefersAM', time === 'AM');
-    
+
                 if (customeError) {
                     throw customeError;
                 }
@@ -67,17 +138,18 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
         };
         setSelectedCustomerNames([]);
         setPressedButtonIndices([]);
-    
+
         fetchData();
-    }, [visibility, time]);
+    }, [visibility, time, supabase]);
 
     useEffect(() => {
+
         const fetchEmployeeData = async () => {
             try {
                 const { data: employeeData, error: employeeError } = await supabase
                     .from('Employee')
                     .select('Name');
-    
+
                 if (employeeError) {
                     throw employeeError;
                 }
@@ -88,7 +160,7 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                 console.error('Error fetching employee data:', error.message);
             }
         };
-    
+
         fetchEmployeeData();
     }, []);
 
@@ -128,96 +200,92 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
         }
     };
 
-    useEffect(() => {
-        const fetchRiderNames = async () => {
-            try {
-                const riderNamesData = {};
-    
-                for (const customerName of selectedCustomerNames) {
-                    const { data: riderData, error: riderError } = await supabase
-                        .from('Rider')
-                        .select('Name')
-                        .eq('Parent_Display_Name', customerName);
-                    
-                    if (riderError) {
-                        console.error('Error fetching rider names:', riderError.message);
-                    } else {
-                        const names = riderData.map(rider => rider.Name);
-                        riderNamesData[customerName] = names;
-                        console.log('Rider names for', customerName, ':', names);
-                    }
-                }
-    
-                setRiderNames(riderNamesData);
-            } catch (error) {
-                console.error('Error fetching rider names:', error.message);
-            }
-        };
-    
-        fetchRiderNames();
-    }, [selectedCustomerNames]);
-    
-    useEffect(() => {
-        const calculateTotalWeight = async () => {
-            let total = 0;
-            const riderWeightsData = {};
-            const employeeWeightsData = {};
-    
+    const fetchRiderNames = useCallback(async () => {
+
+        try {
+            const riderNamesData = {};
+
             for (const customerName of selectedCustomerNames) {
                 const { data: riderData, error: riderError } = await supabase
                     .from('Rider')
-                    .select('Weight')
+                    .select('Name')
                     .eq('Parent_Display_Name', customerName);
+
                 if (riderError) {
-                    console.error('Error fetching rider data:', riderError.message);
+                    console.error('Error fetching rider names:', riderError.message);
                 } else {
-                    const weights = riderData.map(rider => rider.Weight);
-                    const totalWeight = weights.reduce((acc, weight) => acc + weight, 0);
-                    riderWeightsData[customerName] = weights;
-                    total += totalWeight;
+                    const names = riderData.map(rider => rider.Name);
+                    riderNamesData[customerName] = names;
                 }
             }
-    
-            for (const employeeName of selectedEmployeeNames) {
-                const { data: employeeData, error: employeeError } = await supabase
-                    .from('Employee')
-                    .select('Weight')
-                    .eq('Name', employeeName);
-                if (employeeError) {
-                    console.error('Error fetching employee weights:', employeeError.message);
-                } else {
-                    if (employeeData.length > 0) {
-                        total += employeeData[0].Weight;
-                        employeeWeightsData[employeeName] = employeeData[0].Weight;
-                    }
+
+            setRiderNames(riderNamesData);
+        } catch (error) {
+            console.error('Error fetching rider names:', error.message);
+        }
+    }, [selectedCustomerNames, supabase]);
+
+    const calculateTotalWeight = useCallback(async () => {
+
+        let total = 0;
+        const riderWeightsData = {};
+        const employeeWeightsData = {};
+
+        for (const customerName of selectedCustomerNames) {
+            const { data: riderData, error: riderError } = await supabase
+                .from('Rider')
+                .select('Weight')
+                .eq('Parent_Display_Name', customerName);
+            if (riderError) {
+                console.error('Error fetching rider data:', riderError.message);
+            } else {
+                const weights = riderData.map(rider => rider.Weight);
+                const totalWeight = weights.reduce((acc, weight) => acc + weight, 0);
+                riderWeightsData[customerName] = weights;
+                total += totalWeight;
+            }
+        }
+
+        for (const employeeName of selectedEmployeeNames) {
+            const { data: employeeData, error: employeeError } = await supabase
+                .from('Employee')
+                .select('Weight')
+                .eq('Name', employeeName);
+            if (employeeError) {
+                console.error('Error fetching employee weights:', employeeError.message);
+            } else {
+                if (employeeData.length > 0) {
+                    total += employeeData[0].Weight;
+                    employeeWeightsData[employeeName] = employeeData[0].Weight;
                 }
             }
-    
-            setTotalWeight(total);
-            setRiderWeights(riderWeightsData);
-            setEmployeeWeights(employeeWeightsData);
-    
-            console.log('Rider weights data:', riderWeightsData);
-        };
-    
+        }
+
+        setTotalWeight(total);
+        setRiderWeights(riderWeightsData);
+        setEmployeeWeights(employeeWeightsData);
+    }, [selectedCustomerNames, selectedEmployeeNames, supabase]);
+
+    useEffect(() => {
+        fetchRiderNames();
         calculateTotalWeight();
-    }, [selectedCustomerNames, selectedEmployeeNames]);
+    }, [fetchRiderNames, calculateTotalWeight]);
 
     const handleSubmit = async () => {
+
         try {
             const meetingTime = time === 'AM' ? sunriseMoment : sunsetMoment;
             const isAM = time === 'AM';
             const isPublic = visibility === 'Public';
             const date = selectedDate2.format('YYYY-MM-DD');
             const formattedMeetingTime = meetingTime.format('HH:mm:ss'); // 格式化会议时间为小时分钟秒钟格式
-            let appointmentDataResult = [];
-    
+
             // 在数据库中创建新的一行
             const { data: appointmentData, error: appointmentError } = await supabase
                 .from('Appointment')
                 .insert([{ Date: date, Time: formattedMeetingTime, isAM: isAM, isPublic: isPublic }])
                 .select();
-    
+
             // 添加错误检查并打印错误消息到控制台
             if (appointmentError) {
                 console.error('Error inserting appointment:', appointmentError.message);
@@ -234,10 +302,10 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                 .eq('Time', formattedMeetingTime)
                 .eq('isAM', isAM)
                 .eq('isPublic', isPublic);
-    
-                const appointmentId = appointmentID[0].Appointment_id;
-                console.log('Newly created Appointment ID:', appointmentId);
-    
+
+            const appointmentId = appointmentID[0].Appointment_id;
+            console.log('Newly created Appointment ID:', appointmentId);
+
             // 将 Appointment_id 添加到 Customer 数据库中的相应行
             for (const customerName of selectedCustomerNames) {
                 const { error: updateCustomerError } = await supabase
@@ -248,7 +316,7 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                     throw updateCustomerError;
                 }
             }
-    
+
             // 获取名为 Employee 的数据库中 Name 等于 selectedEmployeeNames 所有符合项的 Employee_id
             const employeeIds = [];
             for (const employeeName of selectedEmployeeNames) {
@@ -264,7 +332,7 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                     }
                 }
             }
-    
+
             // 在数据库 EmployeeAppointment 中创建新的行，创建的每一行的 Appointment_id 都是上文创建的 Appointment_id
             for (const employeeId of employeeIds) {
                 const { error: insertEmployeeAppointmentError } = await supabase
@@ -274,31 +342,32 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                     throw insertEmployeeAppointmentError;
                 }
             }
-    
+
             // 提示提交成功或执行其他操作
             console.log('Submission successful!');
+            toast.success('Submission successful!');
         } catch (error) {
-            console.error('Error submitting data:', error.message);
+            if (error.message == 'duplicate key value violates unique constraint "EmployeeAppointment_pkey"') {
+            console.error('Error submitting data: There are duplicate employee appointments');
+            toast.error(`Error submitting data: There are duplicate employee appointments`);
+            } else {
+                console.error('Error submitting data:',error.message);
+                toast.error(`Error submitting data: ${error.message}`);
+            }
         }
     };
-    
-    
-    
-    
 
-    console.log(selectedCustomerNames);
-    console.log(selectedEmployeeNames);
-    console.log(sunrise);
-    console.log(sunset);
-    console.log(riderWeights);
+    useEffect(() => {
+        const Time = time === 'AM' ? 'morning' : 'evening';
+        const meetingTime = time === 'AM' ? sunriseMoment.clone().subtract(15, 'minutes') : sunsetMoment.clone().subtract(2, 'hours').subtract(15, 'minutes');
+        setEmailBody(`Your balloon flight is now scheduled the ${Time} of ${selectedDate2.format('MMMM DD YYYY')} with a meeting time of ${meetingTime.format('HH:mm')} ${time}. I will text you between 9 and 10 p.m. the evening before your flight with the meeting location details. The meeting sites are all within a 10-mile radius of ${selectedLocation}. If you don't hear from me by 10 p.m., please call me at (330) 633-3288. I am attaching a list of potential meeting sites. Please let me know that you received this email.\n\nThanks,\nDenny`);
+        setSubject(`Flight Appointment for ${selectedDate2.format('MMMM DD YYYY')}`);
+    }, [selectedDate2, time, sunriseMoment, sunsetMoment]);
 
-    // Function to handle refreshing email body content
-    const handleRefreshEmailBody = () => {
-        const meetingTime = time === 'AM' ? sunrise : sunset;
-        setEmailBody(`Your balloon flight is now scheduled the morning of ${selectedDate2.format('MMMM DD YYYY')} with a meeting time of ${meetingTime}. I will text you between 9 and 10 p.m. the evening before your flight with the meeting location details. The meeting sites are all within a 10-mile radius of ${selectedLocation}. If you don't hear from me by 10 p.m., please call me at (330) 633-3288. I am attaching a list of potential meeting sites. Please let me know that you received this email.\n\nThanks,\nDenny`);
-    };
+    console.log(emailBody);
 
     return (
+
         <div className="your-component-container">
             <div className="menu-bar">
                 <div className="menu-item">
@@ -307,7 +376,7 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                     </div>
                     {visibilityOpen && (
                         <div className="menu-options" onClick={(e) => e.stopPropagation()}>
-                            <div onClick={() => handleVisibilityChange('Public')}>Public</div>
+                            <div onClick={() => handleVisibilityChange('Shared')}>Shared</div>
                             <div onClick={() => handleVisibilityChange('Private')}>Private</div>
                         </div>
                     )}
@@ -328,11 +397,6 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                 <div className="menu-item">
                     <div className="current-date">{selectedDate2.format('MMMM DD YYYY')}</div>
                 </div>
-
-                {/* Add refresh button */}
-                <div className="menu-item">
-                    <button onClick={handleRefreshEmailBody}>Refresh Email Body</button>
-                </div>
             </div>
 
             <div className="content-container">
@@ -340,10 +404,10 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                     <h4>Customer Names</h4>
                     <div className="customer-buttons">
                         {customerNames.map((customer, index) => (
-                            <button 
-                                key={index} 
-                                onClick={() => handleButtonPress(index)} 
-                                style={{ backgroundColor: pressedButtonIndices.includes(index) ? '#007bff' : '#fff' }} 
+                            <button
+                                key={index}
+                                onClick={() => handleButtonPress(index)}
+                                style={{ backgroundColor: pressedButtonIndices.includes(index) ? '#007bff' : '#fff' }}
                             >
                                 {customer}
                             </button>
@@ -356,22 +420,22 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                         <button onClick={nextPage} disabled={currentPage === totalPages - 1}>Next</button>
                     </div>
                 </div>
-                <hr />
+                <hr/>
                 <div className="customer-container">
                     <h4>Employee Names</h4>
                     <div className="customer-buttons">
                         {allEmployeeNames.map((employeeName, index) => (
-                            <button 
-                                key={index} 
-                                onClick={() => handleEmployeeButtonPress(employeeName)} 
-                                style={{ backgroundColor: selectedEmployeeNames.includes(employeeName) ? '#007bff' : '#fff' }} 
+                            <button
+                                key={index}
+                                onClick={() => handleEmployeeButtonPress(employeeName)}
+                                style={{ backgroundColor: selectedEmployeeNames.includes(employeeName) ? '#007bff' : '#fff' }}
                             >
                                 {employeeName}
                             </button>
                         ))}
                     </div>
                 </div>
-                <hr />
+                <hr/>
                 <div className="summary-container">
                     <h4>Summary</h4>
                     <table>
@@ -409,31 +473,27 @@ function YourComponent({ selectedDate2, sunrise, sunset, selectedLocation }) {
                             ))}
 
                             <tr>
-                            <td colSpan="3" style={{ color: totalWeight >= 1100 ? 'red' : 'green' , textAlign: 'center'}}>
-        {totalWeight >= 1100 ? 'OVERLOADED!' : 'SAFE'}
-    </td>
-</tr>
-<tr>
-    <td colSpan="2" style={{ color: totalWeight >= 1100 ? 'red' : 'inherit' }}>Total Weight:</td>
-    <td style={{ color: totalWeight >= 1100 ? 'red' : 'inherit' }}>{totalWeight}</td>
+                                <td colSpan="3" style={{ color: totalWeight >= 1100 ? 'red' : 'green', textAlign: 'center' }}>
+                                    {totalWeight >= 1100 ? 'OVERLOADED!' : 'SAFE'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ color: totalWeight >= 1100 ? 'red' : 'inherit' }}>Total Weight:</td>
+                                <td style={{ color: totalWeight >= 1100 ? 'red' : 'inherit' }}>{totalWeight}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <hr />
+                <hr/>
                 <div className="email-container">
                     <h4>Email</h4>
-                    <textarea
-                        value={emailBody}
-                        onChange={handleEmailBodyChange}
-                        rows={10}
-                        cols={50}
-                    />
+                    <Email Recipients={Recipients} Subject={Subject} Body={emailBody} />
                 </div>
             </div>
             <div className="submit-button-container">
-            <button onClick={handleSubmit}>Submit</button>
-        </div>
+                <button onClick={handleSubmit}>Create Appointment</button>
+                <ToastContainer position="top-right" autoClose={3000} />
+            </div>
         </div>
     );
 }

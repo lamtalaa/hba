@@ -1,0 +1,130 @@
+/* Pop up itself */
+.modal-container {
+
+    max-width: 350px;
+    margin: 0;
+    background-color: var(--theme-constant);
+    border: none;
+    overflow: visible;
+    border-radius: 8px;
+    position: fixed;
+}
+
+/* Positions self relative to object of interest */
+.modal-container.pointing.left {
+
+    transform: translate(6%, -50%);
+}
+
+.modal-container.pointing.right {
+
+    transform: translate(-107%, -50%);
+}
+
+.modal-container.pointing.up {
+
+    transform: translate(-50%, 15%);
+}
+
+.modal-container.pointing.down {
+
+    transform: translate(-50%, -115%);
+}
+
+.modal-container.pointing.center {
+
+    transform: translate(-50%, -50%);
+}
+
+/* Align content of pop up */
+dialog[open].modal-container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Disabled background color */
+.modal-container::backdrop {
+
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Pop up title */
+.modal-container h2 {
+
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid var(--theme-primary-5);
+}
+
+/* Actual pointer pointing to object of interest */
+.pointer {
+
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    overflow: hidden;
+}
+
+/* Positioning pointer */
+.pointer::after {
+
+    content: '';
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: var(--theme-constant);
+}
+
+.pointer.up {
+
+    top: -70px;
+}
+
+.pointer.up::after {
+
+    top: 45px;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.pointer.right {
+
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+}
+
+.pointer.right::after {
+
+    top: 50%;
+    right: 45px;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.pointer.down {
+
+    bottom: -70px;
+}
+
+.pointer.down::after {
+
+    bottom: 45px;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.pointer.left {
+
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+}
+
+.pointer.left::after {
+
+    top: 50%;
+    left: 45px;
+    transform: translateY(-50%) rotate(45deg);
+}
+

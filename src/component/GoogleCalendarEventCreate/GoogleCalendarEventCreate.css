@@ -1,0 +1,39 @@
+.google-calendar-event-container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.google-calendar-event-container select {
+
+    width: 100%;
+    margin-bottom: 10px; /* 调整日历选择和按键之间的距离 */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.google-calendar-event-container button.create-event-button {
+
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* 默认颜色为蓝色 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.google-calendar-event-container button.create-event-button:hover {
+
+    background-color: #0056b3; /* 悬停颜色变深 */
+}
+
+.google-calendar-event-container button.create-event-button:active {
+    
+    background-color: #003f7f; /* 点击颜色再次变深 */
+}

@@ -1,8 +1,10 @@
-import './PageTitle.css';
 import { homeText } from '../Text/Text';
+
+import './PageTitle.css';
 
 function PageTitle({ service }) {
     return (
+
         <div className="page_title-container">
             {service === "Overview" ? (
                 <>
@@ -14,8 +16,8 @@ function PageTitle({ service }) {
                 </>
             ) : (
                 <>
-                <h3 className="page_title">{service}</h3>
-                <hr></hr>
+                    <h3 className="page_title">{service}</h3>
+                    <hr></hr>
                 </>
             )}
         </div>

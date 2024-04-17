@@ -1,0 +1,18 @@
+.Email-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* 默认颜色为蓝色 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Email-button:hover {
+    background-color: #0056b3; /* 悬停颜色变深 */
+}
+
+.Email-button:active {
+    background-color: #003f7f; /* 点击颜色再次变深 */
+}
